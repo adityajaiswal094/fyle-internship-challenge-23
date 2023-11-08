@@ -15,7 +15,6 @@ export class GetUserReposFormComponent {
 
   onSubmitUserName() {
     const userName = this.userName;
-    // console.log(userName);
     this.submitUser.emit(userName);
   }
 }

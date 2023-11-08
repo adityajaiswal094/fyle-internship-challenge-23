@@ -10,16 +10,4 @@ export interface Profile {
   twitter_username: string | undefined;
   repos_url: string | undefined;
   repos: Repo[] | undefined;
-
-  // constructor() {
-  //   this.avatar_url = '';
-  //   this.name = '';
-  //   this.login = '';
-  //   this.bio = '';
-  //   this.repos = {
-  //     repoName: '',
-  //     repoBio: '',
-  //     languageUsed: '',
-  //   };
-  // }
 }

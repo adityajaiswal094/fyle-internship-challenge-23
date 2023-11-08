@@ -9,15 +9,10 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  // per_page: number;
-  // page: number;
   userName: string;
   profile: Profile;
 
   constructor(private apiService: ApiService) {
-    // this.per_page = 10;
-    // this.page = 1;
-
     this.userName = '';
 
     this.profile = {
@@ -35,23 +30,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  // gotoNextPage(page: number) {
-  //   page += 1;
-  //   this.page = page;
-  // }
-
-  // gotoPreviousPage(page: number) {
-  //   page -= 1;
-  //   this.page = page;
-  // }
-
   showProfile(userName: string) {
     this.userName = userName;
     this.apiService
       .getUser(userName)
       .pipe(
         mergeMap((data: any, index: number) => {
-          // console.log(data);
           this.profile.avatar_url = data.avatar_url;
           this.profile.login = data.login;
           this.profile.name = data.name;
@@ -61,18 +45,9 @@ export class HomeComponent implements OnInit {
           this.profile.twitter_username = data.twitter_username;
           this.profile.repos_url = data.repos_url;
 
-          // if (
-          //   this.profile.public_repos !== undefined &&
-          //   this.per_page >= this.profile.public_repos
-          // ) {
-          //   this.per_page = this.profile.public_repos;
-          // }
-
           return this.apiService.getRepos(userName).pipe(
             map((data: any, index: number) => {
-              // console.log("repos: ", data);
               this.profile.repos = data;
-              console.log(this.profile.repos);
               return data;
             })
           );
