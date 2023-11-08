@@ -1,0 +1,28 @@
+<div class="container">
+  <nav class="bg-gray-200">
+    <form
+      class="flex flex-row py-3 justify-center items-center gap-4"
+      (ngSubmit)="onSubmitUserName()"
+    >
+      <label
+        for="username"
+        class="flex text-sm font-medium leading-6 text-gray-900 mb-2"
+        >Enter the Github Username</label
+      >
+      <input
+        type="text"
+        name="username"
+        id="username"
+        autocomplete="username"
+        class="flex border-1 bg-green-100 py-1.5 pl-1 text-black placeholder:text-gray-400 rounded sm:text-sm sm:leading-6"
+        placeholder="johndoe11"
+        [(ngModel)]="userName"
+      />
+      <button
+        class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+      >
+        Show Profile
+      </button>
+    </form>
+  </nav>
+</div>

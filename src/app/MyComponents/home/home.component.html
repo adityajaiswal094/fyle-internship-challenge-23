@@ -1,0 +1,18 @@
+<div>
+  <app-get-user-repos-form
+    (submitUser)="showProfile($event)"
+  ></app-get-user-repos-form>
+
+  <div
+    class="flex justify-center flex-col content-center"
+    *ngIf="userName !== ''; else elseBlock"
+  >
+    <app-show-user-repos [profile]="profile"></app-show-user-repos>
+  </div>
+  <ng-template #elseBlock
+    ><p class="text-center">No profile to show.</p></ng-template
+  >
+</div>
+
+<!-- after [profile]="profile" (gotoPreviousPage)="gotoPreviousPage($event)"
+      (gotoNextPage)="gotoNextPage($event)" -->

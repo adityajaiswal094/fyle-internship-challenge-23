@@ -1,0 +1,204 @@
+<div *ngIf="profile.name === ''; else elseBlock">
+  <div class="container px-20 py-6 justify-center">
+    <div class="flex flex-row gap-32">
+      <!-- profile pic, github url -->
+      <div class="flex flex-col justify-center gap-5">
+        <div class="w-48 h-48 bg-gray-300 rounded-full animate-pulse"></div>
+
+        <div class="animate-pulse">
+          <div class="bg-gray-300 h-8 w-48 block"></div>
+        </div>
+      </div>
+
+      <!-- name, bio, twitter -->
+      <div class="flex flex-col justify-start gap-5">
+        <div class="bg-gray-300 h-8 w-50 block animate-pulse"></div>
+        <div class="bg-gray-300 h-4 w-80 block animate-pulse"></div>
+        <div class="bg-gray-300 h-4 w-64 block animate-pulse"></div>
+      </div>
+    </div>
+
+    <!-- repo details -->
+    <div class="flex flex-col">
+      <div class="mt-10 grid grid-cols-2 md:grid-cols-2 gap-4">
+        <div *ngFor="let _ of [].constructor(6); let i = index">
+          <div class="grid grid-cols-2 md:grid-cols-2 gap-2">
+            <div
+              class="h-40 w-auto p-6 bg-white-300 border border-white-200 rounded-lg shadow bg-white border-white-700 animate-pulse mb-4"
+            >
+              <h5 class="bg-gray-300 h-8 w-44 block animate-pulse mb-2"></h5>
+              <p class="bg-gray-300 h-4 w-50 block animate-pulse mb-2"></p>
+              <p class="bg-gray-300 h-4 w-50 block animate-pulse mb-2"></p>
+              <p class="bg-gray-300 h-4 w-40 block animate-pulse"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #elseBlock
+  ><div class="container px-20 py-6 justify-center">
+    <!-- image, name, bio, profile url -->
+    <div class="flex flex-row gap-32">
+      <!-- image, profile url -->
+      <div class="flex flex-col justify-center gap-5">
+        <div class="w-48">
+          <img
+            class="inline-block rounded-full ring-2 ring-white"
+            src="{{
+              profile.avatar_url
+                ? profile.avatar_url
+                : 'https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png'
+            }}"
+            alt="Profile Picture"
+          />
+        </div>
+
+        <div>
+          <a
+            href="{{ profile.html_url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ profile.html_url }}</a
+          >
+        </div>
+      </div>
+
+      <!-- name, bio -->
+      <div class="flex flex-col justify-start gap-5">
+        <h2>{{ profile.name ? profile.name : "No name" }}</h2>
+        <p>{{ profile.bio ? profile.bio : "No bio" }}</p>
+        <p>
+          <ng-container *ngIf="profile.twitter_username">
+            Twitter:
+            <a
+              [href]="'https://twitter.com/' + profile.twitter_username"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ "https://twitter.com/" + profile.twitter_username }}</a
+            >
+          </ng-container>
+          <ng-container *ngIf="!profile.twitter_username">
+            No Twitter account
+          </ng-container>
+        </p>
+      </div>
+    </div>
+
+    <!-- rest of the details -->
+    <div class="flex flex-col">
+      <div class="mt-10 grid grid-cols-2 md:grid-cols-2 gap-4">
+        <div *ngFor="let repo of profile.repos; index as i">
+          <div class="grid grid-cols-2 md:grid-cols-2 gap-2">
+            <a
+              href="{{ repo.html_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-block h-40 w-auto p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+            >
+              <h5
+                class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate"
+              >
+                {{ repo.name ? repo.name : "No name" }}
+              </h5>
+              <p
+                class="font-normal text-lg truncate text-gray-700 dark:text-gray-400"
+              >
+                {{ repo.description ? repo.description : "No description" }}
+              </p>
+              <div class="max-w-full">
+                <ng-container
+                  *ngIf="
+                    repo.topics && repo.topics.length > 0;
+                    else noTopicsBlock
+                  "
+                >
+                  <p
+                    class="font-normal text-lg text-gray-400 dark:text-gray-400 line-clamp-2"
+                  >
+                    {{ repo.topics.join(" ") }}
+                  </p>
+                </ng-container>
+                <ng-template #noTopicsBlock>
+                  <p
+                    class="font-normal text-lg text-gray-400 dark:text-gray-400"
+                  >
+                    No topics
+                  </p>
+                </ng-template>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- pagination to navigate through pages to show -->
+      <!-- <div
+      class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+    >
+      <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm text-gray-700">
+            Showing
+            <span class="font-medium">{{
+              per_page * (page - 1) === 0 ? 1 : per_page * (page - 1) + 1
+            }}</span>
+            to
+            <span class="font-medium">{{
+              profile.public_repos !== undefined &&
+              per_page * page >= profile.public_repos
+                ? profile.public_repos
+                : per_page * page
+            }}</span>
+            of
+            <span class="font-medium">{{ profile.public_repos }}</span>
+            results
+          </p>
+        </div>
+        <div>
+          <nav
+            class="isolate inline-flex -space-x-px rounded-md shadow-sm"
+            aria-label="Pagination"
+          >
+            <button
+              class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              <span class="sr-only">Previous</span>
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <button
+              class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              <span class="sr-only">Next</span>
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div> -->
+    </div>
+  </div></ng-template
+>
